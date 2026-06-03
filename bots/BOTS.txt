@@ -1,0 +1,6 @@
+All bots comsume 1 energy per turn
+
+SPAWN ENERGY
+Scout  -> 50 units
+Worker -> 200 units
+Miner  -> 300 units

@@ -1,0 +1,1 @@
+"""Ability to change the maze when it is not favorable"""

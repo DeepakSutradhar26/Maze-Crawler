@@ -1,0 +1,16 @@
+MOVES/TURN
+
+Foctory move          -> 1 move per 2 turns
+Jump move             -> 1 move per 20 turns
+South Boundary update -> 1 north per 4 turns
+
+SYMBOLS
+Foctory -> 0
+Scout   -> 1
+Worker  -> 2
+Miner   -> 3
+
+North -> 0001
+East  -> 0010
+South -> 0100
+West  -> 1000
