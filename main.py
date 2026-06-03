@@ -3,6 +3,11 @@
 from random import choice
 
 def agent(obs, config):
+    print('AGENT CALLED')
+    print(obs)
+    print(config)
+    return {}
+
     actions = {}
     width = config.width
     my_robots = {
