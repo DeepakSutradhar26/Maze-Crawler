@@ -1,5 +1,5 @@
 """Crawl starter agent: build a worker, march north, knock down walls."""
-from bots.factory import north_possible
+from bots.factory import move
 
 def agent(obs, config):
     actions = {}
@@ -14,8 +14,11 @@ def agent(obs, config):
         build_cd = data[7] if len(data) > 7 else 0
 
         if rtype == 0:
-            index = (row - obs.southBound) * config.width + col
-            if north_possible(index, obs.walls):
-                actions[uid] = "NORTH"
+            direction = move(row, col, obs.southBoud, config.width, obs.walls)
+            if len(direction) > 0:
+                actions[uid] = direction
+            else:
+                # Deploy Worker
+                pass
         
     return actions
