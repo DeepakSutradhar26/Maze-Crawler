@@ -1,1 +1,0 @@
-"""Dectects map with manhattan distance of 5"""

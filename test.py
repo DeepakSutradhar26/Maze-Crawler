@@ -1,6 +1,6 @@
 from kaggle_environments import make
 
-env = make("crawl", configuration={"randomSeed": 42}, debug=True)
+env = make("crawl", configuration={"randomSeed": 42, "episodeSteps": 2}, debug=True)
 env.run(["main.py", "random"])
 
 # View result
