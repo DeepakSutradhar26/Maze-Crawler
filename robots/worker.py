@@ -5,15 +5,15 @@ from robots.robot import Robot
 class Worker:
     @staticmethod
     def move(
-        workerRow, workerCol, southBound, northBound, width, walls, factoryRow, factoryCol
+        workerRow, workerCol, factoryRow, factoryCol, obs, config
         ):
         return Robot.move(
-            1, workerRow, workerCol, southBound, northBound, width, walls, factoryRow, factoryCol
+            1, workerRow, workerCol, factoryRow, factoryCol, obs, config
             )
 
     @staticmethod
-    def breakWall(workerRow, workerCol, southBound, northBound, width, walls):
-        factoryIndex = (workerRow - southBound) * width + workerCol
+    def breakWall(workerRow, workerCol, obs, config):
+        factoryIndex = (workerRow - obs.southBound) * config.width + workerCol
 
         maxWt, optimalDir = 0, ""
 
@@ -23,21 +23,21 @@ class Worker:
                 b = d
             return a, b
 
-        if walls[factoryIndex] & 1 and workerRow+1 <= northBound:
+        if obs.walls[factoryIndex] & 1 and workerRow+1 <= obs.northBound:
             dir, wt = Robot.move(
-                0, workerRow+1, workerCol, southBound, northBound, width, walls, -1, -1
+                0, workerRow+1, workerCol, workerRow+1, workerCol, obs, config
             )
             maxWt, optimalDir = compare(maxWt, optimalDir, wt, dir)
         
-        if walls[factoryIndex] & 2 and workerCol+1 < width:
+        if obs.walls[factoryIndex] & 2 and workerCol+1 < config.width:
             dir, wt = Robot.move(
-                0, workerRow, workerCol+1, southBound, northBound, width, walls, -1, -1
+                0, workerRow, workerCol+1, workerRow, workerCol+1, obs, config
             )
             maxWt, optimalDir = compare(maxWt, optimalDir, wt, dir)
 
-        if walls[factoryIndex] & 8 and workerCol-1 >= 0:
+        if obs.walls[factoryIndex] & 8 and workerCol-1 >= 0:
             dir, wt = Robot.move(
-                0, workerRow, workerCol-1, southBound, northBound, width, walls, -1, -1
+                0, workerRow, workerCol-1, workerRow, workerCol-1, obs, config
             )
             maxWt, optimalDir = compare(maxWt, optimalDir, wt, dir)
 

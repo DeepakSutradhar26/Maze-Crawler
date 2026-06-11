@@ -5,8 +5,8 @@ from robots.robot import Robot
 # Did not take south boundary shrinking condition
 class Factory:
     @staticmethod
-    def move(row, col, southBound, northBound, width, walls):
-        return Robot.move(0, row, col, southBound, northBound, width, walls, row, col)
+    def move(row, col, obs, config):
+        return Robot.move(0, row, col, row, col, obs, config)
 
     @staticmethod
     def buildScout():

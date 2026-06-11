@@ -26,7 +26,7 @@ def agent(obs, config):
     index = (row - obs.southBound) * config.width + col 
 
     direction, _ = Factory.move(
-        row, col, obs.southBound, obs.northBound, config.width, obs.walls
+        row, col, obs, config
         )
     
     if len(direction) > 0:
@@ -44,12 +44,12 @@ def agent(obs, config):
                 minUid = workerUid
 
         workerAction, _ = Worker.move(
-            minRow, minCol, obs.southBound, obs.northBound, config.width, obs.walls, row, col
+            minRow, minCol, row, col, obs, config
             )
         
-        if workerAction == "break_wall":
+        if workerAction == "BREAK_WALL":
             actions[minUid] = Worker.breakWall(
-                minRow, minCol, obs.southBound, obs.northBound, config.width, obs.walls
+                minRow, minCol, obs, config
                 )
         else:
             actions[minUid] = workerAction

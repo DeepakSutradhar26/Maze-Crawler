@@ -14,18 +14,28 @@ class Robot:
         rtype,
         row,
         col,
-        energy,
         factoryRow,
         factoryCol,
         obs,
         config
         ):
-        
+
+        def saveEnergy(row, obs, config):
+            distance = row - obs.southBound
+            turnsLeft = config.episodeSteps - obs.step
+            rateBoundary = config.scrollStartInterval + \
+                obs.step * (config.scrollEndInterval - \
+                config.scrollStartInterval)/config.scrollRampSteps
+            return distance > turnsLeft/rateBoundary
+
+        if saveEnergy(row, obs, config):
+            return "IDLE", 0
+
         currIndex = (row - obs.southBound) * config.width + col
 
         if rtype == 2:
             if row == factoryRow and col == factoryCol and obs.walls[currIndex] & 1:
-                return "break_wall"
+                return "BREAK_WALL", 0
 
         # For handling vis out of bound
         minCol     = max(0, col - 4)
@@ -38,7 +48,7 @@ class Robot:
         vis = [[0] * 9 for _ in range(9)]
         q = deque()
 
-        vis[row][col] = 1
+        vis[row-minRow][col-minCol] = 1
 
         if col - 1 >= 0 and not (obs.walls[currIndex] & 8):
             q.append([3, row, col-1])
@@ -51,9 +61,6 @@ class Robot:
 
         while q:
             dir, r, c = q.popleft()
-
-            if r-minRow < 0 or r-minRow > 8:
-                print(row, r, minRow)
 
             if vis[r-minRow][c-minCol]: continue
             vis[r-minRow][c-minCol] = 1
