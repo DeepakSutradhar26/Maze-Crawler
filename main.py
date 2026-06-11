@@ -2,7 +2,10 @@
 from robots.factory import Factory
 from robots.worker import Worker
 
+prevActions = {}
+
 def agent(obs, config):
+    global prevActions
     actions = {}
 
     workers = []
@@ -18,7 +21,7 @@ def agent(obs, config):
                 factoryUid, factoryData = uid, data
             elif rtype == 2:
                 has_worker = True
-                workers.append([uid, col, row])
+                workers.append([uid, row, col])
 
     rtype, col, row, energy = factoryData[0], factoryData[1], factoryData[2], factoryData[3]
     build_cd = factoryData[7]
@@ -26,14 +29,14 @@ def agent(obs, config):
     index = (row - obs.southBound) * config.width + col 
 
     direction, _ = Factory.move(
-        row, col, obs, config
+        row, col, obs, config, prevActions.get(factoryUid, None)
         )
     
-    if len(direction) > 0:
-        actions[factoryUid] = direction
-    elif has_worker:
+    actions[factoryUid] = direction
+
+    if has_worker:
         # Worker Logic
-        minUid, minCol, minRow = -1, 100, 100
+        minUid, minCol, minRow = -1, 1000, 1000
 
         for workerUid, workerRow, workerCol in workers:
             prevDist = abs(minRow - row) + abs(minCol - col)
@@ -44,7 +47,7 @@ def agent(obs, config):
                 minUid = workerUid
 
         workerAction, _ = Worker.move(
-            minRow, minCol, row, col, obs, config
+            minRow, minCol, row, col, obs, config, prevActions.get(minUid, None)
             )
         
         if workerAction == "BREAK_WALL":
@@ -57,9 +60,7 @@ def agent(obs, config):
         actions[factoryUid] = Factory.buildWorker()
     elif not obs.walls[index] & 2:
         actions[factoryUid] = "EAST"
-        
-    print("obs:", obs)
-    print("config:", config)
-    print("wall:", obs.walls[index])
-    print("actions:",actions)
+
+    prevActions = actions
+
     return actions

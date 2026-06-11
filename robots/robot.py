@@ -17,19 +17,17 @@ class Robot:
         factoryRow,
         factoryCol,
         obs,
-        config
+        config,
+        prevAction
         ):
 
-        def saveEnergy(row, obs, config):
-            distance = row - obs.southBound
-            turnsLeft = config.episodeSteps - obs.step
-            rateBoundary = config.scrollStartInterval + \
-                obs.step * (config.scrollEndInterval - \
-                config.scrollStartInterval)/config.scrollRampSteps
-            return distance > turnsLeft/rateBoundary
-
-        if saveEnergy(row, obs, config):
-            return "IDLE", 0
+        # def saveEnergy(row, obs, config):
+        #     distance = row - obs.southBound
+        #     turnsLeft = config.episodeSteps - obs.step
+        #     rateBoundary = config.scrollStartInterval + \
+        #         obs.step * (config.scrollEndInterval - \
+        #         config.scrollStartInterval)/config.scrollRampSteps
+        #     return distance > turnsLeft/rateBoundary
 
         currIndex = (row - obs.southBound) * config.width + col
 
@@ -71,18 +69,27 @@ class Robot:
 
             index = (r - obs.southBound) * config.width + c
 
-            if c-1 >= leftBound and (obs.walls[index] & 8):
+            if c-1 >= leftBound and not (obs.walls[index] & 8):
                 q.append([dir, r, c-1])
 
-            if c+1 <= rightBound and (obs.walls[index] & 2):
+            if c+1 <= rightBound and not (obs.walls[index] & 2):
                 q.append([dir, r, c+1])
 
-            if r+1 <= upperBound and (obs.walls[index] & 1):
+            if r+1 <= upperBound and not (obs.walls[index] & 1):
                 q.append([dir, r+1, c])
 
-        result, wt = "", 0
+        prevIndex = next((k for k,v in Robot.directionMap.items() if v == prevAction), None)
+
+        def reverseDirection(index):
+            if prevAction is None:
+                return False
+            if prevIndex is None:
+                return False
+            return abs(index - prevIndex) == 2
+
+        result, wt = "IDLE" if rtype == 0 else "BREAK_WALL", 0
         for i in range(4):
-            if dirWts[i] > wt:
+            if dirWts[i] > wt and not reverseDirection(i):
                 wt = dirWts[i]
                 result = Robot.directionMap[i]
 

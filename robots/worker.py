@@ -5,10 +5,10 @@ from robots.robot import Robot
 class Worker:
     @staticmethod
     def move(
-        workerRow, workerCol, factoryRow, factoryCol, obs, config
+        workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
         ):
         return Robot.move(
-            1, workerRow, workerCol, factoryRow, factoryCol, obs, config
+            1, workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
             )
 
     @staticmethod
@@ -25,20 +25,20 @@ class Worker:
 
         if obs.walls[factoryIndex] & 1 and workerRow+1 <= obs.northBound:
             dir, wt = Robot.move(
-                0, workerRow+1, workerCol, workerRow+1, workerCol, obs, config
+                0, workerRow+1, workerCol, workerRow+1, workerCol, obs, config, "NORTH"
             )
             maxWt, optimalDir = compare(maxWt, optimalDir, wt, dir)
         
         if obs.walls[factoryIndex] & 2 and workerCol+1 < config.width:
             dir, wt = Robot.move(
-                0, workerRow, workerCol+1, workerRow, workerCol+1, obs, config
+                0, workerRow, workerCol+1, workerRow, workerCol+1, obs, config, "EAST"
             )
             maxWt, optimalDir = compare(maxWt, optimalDir, wt, dir)
 
         if obs.walls[factoryIndex] & 8 and workerCol-1 >= 0:
             dir, wt = Robot.move(
-                0, workerRow, workerCol-1, workerRow, workerCol-1, obs, config
+                0, workerRow, workerCol-1, workerRow, workerCol-1, obs, config, "WEST"
             )
             maxWt, optimalDir = compare(maxWt, optimalDir, wt, dir)
 
-        return optimalDir
+        return "REMOVE_DIR_" + optimalDir
