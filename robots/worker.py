@@ -8,7 +8,7 @@ class Worker:
         workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
         ):
         return Robot.move(
-            1, workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
+            2, workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
             )
 
     @staticmethod
