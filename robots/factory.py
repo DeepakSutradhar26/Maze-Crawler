@@ -7,6 +7,10 @@ class Factory:
     @staticmethod
     def move(row, col, obs, config, prevAction):
         return Robot.move(0, row, col, row, col, obs, config, prevAction)
+    
+    @staticmethod
+    def jumpNorth():
+        return "JUMP_NORTH"
 
     @staticmethod
     def buildScout():

@@ -14,7 +14,7 @@ class Worker:
     
     @staticmethod
     def breakNorth():
-        return "REMOVE_DIR_NORTH"
+        return "REMOVE_NORTH"
 
     @staticmethod
     def breakWall(workerRow, workerCol, obs, config):

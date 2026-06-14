@@ -38,18 +38,25 @@ def agent(obs, config):
         )
 
     # Cooldown, Index And Enegy Constraints
-    possibleWoker = (build_cd == 0 and energy > Worker.cost)
+    isMoving = (row + 1 == prevRow and col == prevCol)
+
+    # Task: Write logic when factory is at northBound and Miner logic
     
     # Factory Movement And Spawn Worker
-    if row + 1 == prevRow and col == prevCol and len(workers) < 1 and possibleWoker:
+    if direction == "IDLE" and build_cd == 0:
+        actions[factoryUid] = Factory.jumpNorth()
+
+    elif isMoving and len(workers) < 1 and energy > Worker.cost:
         actions[factoryUid] = Factory.buildWorker()
-    elif direction == "IDLE" and row - obs.southBound > 1 and not (row == prevRow-1 and col == prevCol):
+
+    elif direction == "IDLE" and not isMoving:
         actions[factoryUid] = "SOUTH"
+        
     else:
         actions[factoryUid] = direction
 
+    # Worker Logic
     if has_worker:
-        # Worker Logic
         minUid, minCol, minRow = -1, 1000, 1000
 
         for workerUid, workerRow, workerCol in workers:
@@ -60,16 +67,13 @@ def agent(obs, config):
                 minCol = workerCol
                 minUid = workerUid
 
-        workerIndex = (minRow - obs.southBound) * config.width + minCol
+        workerAction, _ = Worker.move(
+            minRow, minCol, row, col, obs, config, prevActions.get(minUid, None)
+        )
 
-        if minRow == row + 1 and minCol == col and (obs.walls[workerIndex] & 1):
+        if workerAction == "BREAK_WALL":
             actions[minUid] = Worker.breakNorth()
-        elif minRow == row and minCol == col and not (obs.walls[workerIndex] & 1):
-            actions[minUid] = "NORTH" 
         else:
-            workerAction, _ = Worker.move(
-                minRow, minCol, row, col, obs, config, prevActions.get(minUid, None)
-                )
             actions[minUid] = workerAction
 
     # Track Previous Actions
