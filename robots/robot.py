@@ -63,11 +63,13 @@ class Robot:
             if vis[r-minRow][c-minCol]: continue
             vis[r-minRow][c-minCol] = 1
 
-            workerWt = 5 * (factoryRow == r and factoryCol == c) if rtype == 2 else 0
+            workerWt = 10 * (factoryRow == r and factoryCol == c) if rtype == 2 else 0
 
             dirWts[dir] = abs(r - row) + workerWt
 
             index = (r - obs.southBound) * config.width + c
+
+            if obs.walls[index] == -1: continue
 
             if c-1 >= leftBound and not (obs.walls[index] & 8):
                 q.append([dir, r, c-1])
@@ -87,7 +89,13 @@ class Robot:
                 return False
             return abs(index - prevIndex) == 2
 
-        result, wt = "IDLE" if rtype == 0 else "BREAK_WALL", 0
+        result, wt = "", 0
+
+        if rtype == 0:
+            result = "IDLE"
+        else:
+            result = "BREAK_WALL"
+
         for i in range(4):
             if dirWts[i] > wt and not reverseDirection(i):
                 wt = dirWts[i]

@@ -3,13 +3,18 @@ from robots.robot import Robot
 
 # Did not consider the case when opponent build the wall in my path
 class Worker:
+    cost = 200
     @staticmethod
     def move(
         workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
         ):
         return Robot.move(
-            1, workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
+            2, workerRow, workerCol, factoryRow, factoryCol, obs, config, prevAction
             )
+    
+    @staticmethod
+    def breakNorth():
+        return "REMOVE_DIR_NORTH"
 
     @staticmethod
     def breakWall(workerRow, workerCol, obs, config):
