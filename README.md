@@ -14,12 +14,12 @@ The maze has walls blocking movement, fog limiting visibility, and a mirrored la
 
 ## Robot Types
 
-| Robot   | Cost | Energy | Speed       | Vision | Role                        |
-|---------|------|--------|-------------|--------|-----------------------------|
-| Factory | free | unlimited | every 2 turns | 4  | Main unit, builds robots    |
-| Scout   | 50   | 100    | every turn  | 5      | Fast exploration            |
-| Worker  | 200  | 300    | every 2 turns | 3    | Breaks and builds walls     |
-| Miner   | 300  | 500    | every 2 turns | 3    | Converts to energy mine     |
+| Robot   | Type ID | Cost | Energy | Speed       | Vision | Role                        |
+|---------|---------|------|--------|-------------|--------|-----------------------------|
+| Factory | 0       | free | unlimited | every 2 turns | 4  | Main unit, builds robots    |
+| Scout   | 1       | 50   | 100    | every turn  | 5      | Fast exploration            |
+| Worker  | 2       | 200  | 300    | every 2 turns | 3    | Breaks and builds walls     |
+| Miner   | 3       | 300  | 500    | every 2 turns | 3    | Converts to energy mine     |
 
 All robots consume 1 energy per turn. A robot with 0 energy goes idle.
 
@@ -54,10 +54,10 @@ robots/
 
 Walls are edges between cells. A worker standing at cell `(r, c)` can remove:
 
-- The north wall with `REMOVE_DIR_NORTH`
-- The south wall with `REMOVE_DIR_SOUTH`
-- The east wall with `REMOVE_DIR_EAST`
-- The west wall with `REMOVE_DIR_WEST`
+- The north wall with `REMOVE_NORTH`
+- The south wall with `REMOVE_SOUTH`
+- The east wall with `REMOVE_EAST`
+- The west wall with `REMOVE_WEST`
 
 Each wall break costs 100 energy. The worker must be on either side of the wall to remove it.
 
